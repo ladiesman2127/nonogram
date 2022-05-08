@@ -1,0 +1,10 @@
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final_v2.0.csproj.AssemblyReference.cache
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final.gameBoard.resources
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final.startForm.resources
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final_v2.0.csproj.GenerateResource.cache
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final_v2.0.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final_v2.0.AssemblyInfoInputs.cache
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final_v2.0.AssemblyInfo.cs
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final_v2.0.csproj.CoreCompileInputs.cache
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final_v2._0.Properties.Resources.resources
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows\nonogram_final_v2._0.Resources.Properties.Resources.resources
