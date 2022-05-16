@@ -16,22 +16,22 @@ namespace nonogram_final
 
 	public class nonogramClass
 	{
-		private nonogram_object checkNonogramObject;
-		public static int Index;
-		private readonly int _width;
-		private readonly int _height;
-		private readonly int _overallHeight;
-		private readonly int _overallWidth;
-		private readonly int _topIndicesLegnth;
-		private readonly int _leftIndicesLength;
-		private PictureBox _pictureBox;
-		private Label _label;
+		private nonogram_object                 checkNonogramObject;
+		public static int                       Index;
+		private readonly int                    _width;
+		private readonly int                    _height;
+		private readonly int                    _overallHeight;
+		private readonly int                    _overallWidth;
+		private readonly int                    _topIndicesLegnth;
+		private readonly int                    _leftIndicesLength;
+		private PictureBox                      _pictureBox;
+		private Label                           _label;
 		private readonly List<List<PictureBox>> _pBoxes = new List<List<PictureBox>>();
-		private readonly List<List<Label>> _labels = new List<List<Label>>();
-		private readonly List<int> _singleNonogramList = new List<int>();
-		private readonly List<List<int>> _allNonograms = new List<List<int>>();
-		private gameBoard thisGameBoard = new gameBoard();
-		private readonly Panel _mainPanel = new Panel();
+		private readonly List<List<Label>>      _labels = new List<List<Label>>();
+		private readonly List<int>              _singleNonogramList = new List<int>();
+		private readonly List<List<int>>        _allNonograms = new List<List<int>>();
+		private readonly gameBoard              _thisGameBoard = new gameBoard();
+		private readonly Panel                  _mainPanel = new Panel();
 
 
 
@@ -39,7 +39,7 @@ namespace nonogram_final
 		{
 			_width = width;
 			_height = height;
-			thisGameBoard = gameBoard;
+			_thisGameBoard = gameBoard;
 			gameBoard.Controls.Add(_mainPanel);
 			_topIndicesLegnth = height / 2;
 			_leftIndicesLength = width / 2;
@@ -57,7 +57,6 @@ namespace nonogram_final
 
 		public void MakeGameFields()
 		{
-
 			int x = 0, y = 0;
 			_mainPanel.Size = new Size(38 * _overallWidth + 200, 38 * _overallHeight + 200);
 			for (int i = 0; i < _overallHeight; i++)
@@ -183,9 +182,9 @@ namespace nonogram_final
 		private void BtnBack_Click(object? sender, EventArgs e)
 		{
 			startForm startForm = new startForm();
-			thisGameBoard.Hide();
+			_thisGameBoard.Hide();
 			startForm.ShowDialog();
-			thisGameBoard.Dispose();
+			_thisGameBoard.Dispose();
 		}
 
 		private void BtnCheck_Click(object? sender, EventArgs e)
@@ -242,7 +241,7 @@ namespace nonogram_final
 				obj = (nonogram_object)bf.Deserialize(fs);
 				fs.Close();
 			}
-			thisGameBoard.Hide();
+			_thisGameBoard.Hide();
 			gameBoard gameBoard = new gameBoard();
 			nonogramClass ngr = new nonogramClass(obj._width, obj._height, gameBoard);
 			ngr.MakeGameFields(obj);
@@ -318,9 +317,9 @@ namespace nonogram_final
 		private void Btnback_Click(object? sender, EventArgs e)
 		{
 			startForm startForm = new startForm();
-			thisGameBoard.Hide();
+			_thisGameBoard.Hide();
 			startForm.ShowDialog();
-			thisGameBoard.Dispose();
+			_thisGameBoard.Dispose();
 		}
 
 		private void BtnUpdate_Click(object sender, EventArgs e)
@@ -328,7 +327,7 @@ namespace nonogram_final
 			gameBoard newGameBoard = new gameBoard();
 			nonogramClass ngr = new nonogramClass(Convert.ToInt32(txtWidth.Text),
 				Convert.ToInt32(txtHeight.Text), newGameBoard);
-			thisGameBoard.Hide();
+			_thisGameBoard.Hide();
 			ngr.addAddButton();
 			ngr.MakeGameFields();
 			newGameBoard.ShowDialog();

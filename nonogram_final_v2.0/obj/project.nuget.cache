@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "am/elummfmslo1DS/1sFFceT2S7Tw0E/hxofxU4I1LnKzsikbdikb0JlxYaVLSfTv65P4Q1cVEpb/r6/Pp6I2A==",
+  "dgSpecHash": "gCuAZiIZZ01xAhfNx0c1eMPX9RPpoioyKKco4wa5AVxBgcXgymD6OnDwT7Gses9vUtvjAj9hPJh2C/npfjD3yQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Abstergo\\source\\repos\\nonogram_final_v2.0\\nonogram_final_v2.0\\nonogram_final_v2.0.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Abstergo\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.17763.24\\microsoft.windows.sdk.net.ref.10.0.17763.24.nupkg.sha512"
+    "C:\\Users\\Abstergo\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.17763.25\\microsoft.windows.sdk.net.ref.10.0.17763.25.nupkg.sha512"
   ],
   "logs": []
 }
