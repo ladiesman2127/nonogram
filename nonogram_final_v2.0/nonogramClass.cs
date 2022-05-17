@@ -340,7 +340,6 @@ namespace nonogram_final
 			using (var writer = new FileStream("index.txt", FileMode.Open))
 			{
 				nonogramClass.Index = (int)formatter.Deserialize(writer);
-
 			}
 			FillIndices();
 			MakeGameFields(this);
