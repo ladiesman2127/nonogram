@@ -16,7 +16,7 @@ namespace nonogram_final
 
 	public class nonogramClass
 	{
-		private nonogram_object                 checkNonogramObject;
+		private nonogram_object                 _checkNonogramObject;
 		public static int                       Index;
 		private readonly int                    _width;
 		private readonly int                    _height;
@@ -26,32 +26,33 @@ namespace nonogram_final
 		private readonly int                    _leftIndicesLength;
 		private PictureBox                      _pictureBox;
 		private Label                           _label;
-		private readonly List<List<PictureBox>> _pBoxes = new List<List<PictureBox>>();
-		private readonly List<List<Label>>      _labels = new List<List<Label>>();
+		private readonly List<List<PictureBox>> _pBoxes             = new List<List<PictureBox>>();
+		private readonly List<List<Label>>      _labels             = new List<List<Label>>();
 		private readonly List<int>              _singleNonogramList = new List<int>();
-		private readonly List<List<int>>        _allNonograms = new List<List<int>>();
-		private readonly gameBoard              _thisGameBoard = new gameBoard();
-		private readonly Panel                  _mainPanel = new Panel();
+		private readonly List<List<int>>        _allNonograms       = new List<List<int>>();
+		private readonly gameBoard              _thisGameBoard      = new gameBoard();
+		private readonly Panel                  _mainPanel          = new Panel();
 
 
 
 		public nonogramClass(int width, int height, gameBoard gameBoard)
 		{
-			_width = width;
-			_height = height;
-			_thisGameBoard = gameBoard;
+			gameBoard.StartPosition = FormStartPosition.CenterScreen;
 			gameBoard.Controls.Add(_mainPanel);
-			_topIndicesLegnth = height / 2;
-			_leftIndicesLength = width / 2;
+			_width              = width;
+			_height             = height;
+			_thisGameBoard      = gameBoard;
+			_topIndicesLegnth   = height / 2;
+			_leftIndicesLength  = width / 2;
 			if (height % 2 != 0)
 				_topIndicesLegnth++;
 			if (width % 2 != 0)
 				_leftIndicesLength++;
-			_overallHeight = height + _topIndicesLegnth;
-			_overallWidth = width + _leftIndicesLength;
-			gameBoard.Size = new Size(38 * _overallWidth + 80, 38 * _overallHeight + 80);
+			_overallHeight      = height + _topIndicesLegnth;
+			_overallWidth       = width + _leftIndicesLength;
+			gameBoard.Size      = new Size(38 * _overallWidth + 80, 38 * _overallHeight + 80);
 			_mainPanel.Location = new Point(30, 30);
-			gameBoard.StartPosition = FormStartPosition.CenterScreen;
+
 		}
 
 
@@ -98,7 +99,7 @@ namespace nonogram_final
 		}
 		public void MakeGameFields(nonogram_object nObj)
 		{
-			checkNonogramObject = nObj;
+			_checkNonogramObject = nObj;
 			int x = 0, y = 0;
 			int cur_index = 0;
 			Button btnBack = new Button();
@@ -219,7 +220,7 @@ namespace nonogram_final
 			int ind = 0;
 			while (ind < _singleNonogramList.Count)
 			{
-				if (_singleNonogramList[ind] != checkNonogramObject._lst[ind])
+				if (_singleNonogramList[ind] != _checkNonogramObject._lst[ind])
 					break;
 				ind++;
 			}
