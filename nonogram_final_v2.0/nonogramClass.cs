@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Xml.Serialization;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace nonogram_final
 {
 
 	public class nonogramClass
 	{
-		private nonogram_object                 _checkNonogramObject;
+		private NonogramObject                 _checkNonogramObject;
 		public static int                       Index;
 		private readonly int                    _width;
 		private readonly int                    _height;
@@ -26,12 +17,11 @@ namespace nonogram_final
 		private readonly int                    _leftIndicesLength;
 		private PictureBox                      _pictureBox;
 		private Label                           _label;
-		private readonly List<List<PictureBox>> _pBoxes             = new List<List<PictureBox>>();
-		private readonly List<List<Label>>      _labels             = new List<List<Label>>();
-		private readonly List<int>              _singleNonogramList = new List<int>();
-		private readonly List<List<int>>        _allNonograms       = new List<List<int>>();
-		private readonly gameBoard              _thisGameBoard      = new gameBoard();
-		private readonly Panel                  _mainPanel          = new Panel();
+		private readonly List<List<PictureBox>> _pBoxes             = new();
+		private readonly List<List<Label>>      _labels             = new();
+		private readonly List<int>              _singleNonogramList = new();
+		private readonly gameBoard              _thisGameBoard;
+		private readonly Panel                  _mainPanel          = new();
 
 
 
@@ -43,14 +33,15 @@ namespace nonogram_final
 			_height             = height;
 			_thisGameBoard      = gameBoard;
 			_topIndicesLegnth   = height / 2;
-			_leftIndicesLength  = width / 2;
+			_leftIndicesLength  = width  / 2;
 			if (height % 2 != 0)
 				_topIndicesLegnth++;
 			if (width % 2 != 0)
 				_leftIndicesLength++;
 			_overallHeight      = height + _topIndicesLegnth;
 			_overallWidth       = width + _leftIndicesLength;
-			gameBoard.Size      = new Size(38 * _overallWidth + 80, 38 * _overallHeight + 80);
+			gameBoard.Size      = new Size(38 * _overallWidth + 80, 
+				                           38 * _overallHeight + 80);
 			_mainPanel.Location = new Point(30, 30);
 
 		}
@@ -59,34 +50,35 @@ namespace nonogram_final
 		public void MakeGameFields()
 		{
 			int x = 0, y = 0;
-			_mainPanel.Size = new Size(38 * _overallWidth + 200, 38 * _overallHeight + 200);
+			_mainPanel.Size = new Size(38 *  _overallWidth + 200, 
+				                       38 * _overallHeight + 200);
 			for (int i = 0; i < _overallHeight; i++)
 			{
-				List<PictureBox> linePictureBoxes = new List<PictureBox>();
-				List<Label> lineLabels = new List<Label>();
+				List<PictureBox> linePictureBoxes         = new List<PictureBox>();
+				List<Label> lineLabels                    = new List<Label>();
 				for (int j = 0; j < _overallWidth; j++)
 				{
 					if (i < _topIndicesLegnth ^ j < _leftIndicesLength)
 					{
-						_label = new Label();
+						_label                            = new Label();
 						_mainPanel.Controls.Add(_label);
-						_label.Size = new Size(38, 38);
-						_label.BorderStyle = BorderStyle.FixedSingle;
-						_label.Location = new Point(x, y);
-						_label.BackColor = Color.AliceBlue;
+						_label.Size                       = new Size(38, 38);
+						_label.BorderStyle                = BorderStyle.FixedSingle;
+						_label.Location                   = new Point(x, y);
+						_label.BackColor                  = Color.AliceBlue;
 						lineLabels.Add(_label);
 					}
 					else if (i >= _topIndicesLegnth && j >= _leftIndicesLength)
 					{
-						_pictureBox = new PictureBox();
+						_pictureBox                       = new PictureBox();
 						_pictureBox.BackgroundImageLayout = ImageLayout.Zoom;
 						_mainPanel.Controls.Add(_pictureBox);
-						_pictureBox.Size = new Size(38, 38);
-						_pictureBox.BorderStyle = BorderStyle.FixedSingle;
-						_pictureBox.Location = new Point(x, y);
-						_pictureBox.BackColor = Color.WhiteSmoke;
-						_pictureBox.MouseClick += PictureBox_MouseClick;
-						_pictureBox.MouseDoubleClick += PictureBox_MouseDoubleClick;
+						_pictureBox.Size                  = new Size(38, 38);
+						_pictureBox.BorderStyle           = BorderStyle.FixedSingle;
+						_pictureBox.Location              = new Point(x, y);
+						_pictureBox.BackColor             = Color.WhiteSmoke;
+						_pictureBox.MouseClick           += PictureBox_MouseClick!;
+						_pictureBox.MouseDoubleClick     += PictureBox_MouseDoubleClick!;
 						linePictureBoxes.Add(_pictureBox);
 					}
 					x += 38;
@@ -97,83 +89,84 @@ namespace nonogram_final
 				_labels.Add(lineLabels);
 			}
 		}
-		public void MakeGameFields(nonogram_object nObj)
+
+		public void MakeGameFields(NonogramObject nObj)
 		{
 			_checkNonogramObject = nObj;
-			int x = 0, y = 0;
-			int cur_index = 0;
-			Button btnBack = new Button();
+			int x                           = 0;
+			int y                           = 0;
+			int curIndex                    = 0;
+			Button btnBack                  = new Button();
 			_mainPanel.Controls.Add(btnBack);
-			btnBack.Size = new Size(20, 20);
-			IFormatter formatter = new BinaryFormatter();
-			using (var writer = new FileStream("index.txt", FileMode.Open))
+			btnBack.Size                    = new Size(20, 20);
+			IFormatter formatter            = new BinaryFormatter();
+			using (var writer               = new FileStream("index.txt", FileMode.Open))
 			{
-				nonogramClass.Index = (int)formatter.Deserialize(writer);
-
+				nonogramClass.Index         = (int)formatter.Deserialize(writer);
 			}
-			ComboBox cmbBox = new ComboBox();
-			cmbBox.SelectedIndexChanged += CmbBox_SelectedIndexChanged;
+			ComboBox cmbBox                 = new ComboBox();
+			cmbBox.SelectedIndexChanged    += CmbBox_SelectedIndexChanged;
 			for (int i = 0; i < Index; i++)
 			{
 				cmbBox.Items.Add(i.ToString());
 			}
 			_mainPanel.Controls.Add(cmbBox);
-			cmbBox.Size = new Size(40, 10);
-			cmbBox.Location = new Point(0,20);
-			btnBack.Location = new Point(20, 0);
-			btnBack.FlatStyle = FlatStyle.Popup;
-			btnBack.BackgroundImageLayout = ImageLayout.Stretch;
-			btnBack.BackgroundImage = Image.FromFile("keyboard_backspace_FILL0_wght400_GRAD0_opsz48.png");
-			Button btnCheck = new Button();
-			btnBack.Click += BtnBack_Click;
-			btnCheck.Click += BtnCheck_Click;
+			cmbBox.Size                     = new Size(40, 10);
+			cmbBox.Location                 = new Point(0,20);
+			btnBack.Location                = new Point(20, 0);
+			btnBack.FlatStyle               = FlatStyle.Popup;
+			btnBack.BackgroundImageLayout   = ImageLayout.Stretch;
+			btnBack.BackgroundImage         = Image.FromFile("keyboard_backspace_FILL0_wght400_GRAD0_opsz48.png");
+			Button btnCheck                 = new Button();
+			btnBack.Click                  += BtnBack_Click;
+			btnCheck.Click                 += BtnCheck_Click;
 			_mainPanel.Controls.Add(btnCheck);
-			btnCheck.FlatStyle = FlatStyle.Popup;
-			btnCheck.Location = new Point(0, 0);
-			btnCheck.BackgroundImageLayout = ImageLayout.Stretch;
-			btnCheck.BackgroundImage = Image.FromFile("D:\\Downloads\\done_FILL0_wght400_GRAD0_opsz48.png");
+			btnCheck.FlatStyle              = FlatStyle.Popup;
+			btnCheck.Location               = new Point(0, 0);
+			btnCheck.BackgroundImageLayout  = ImageLayout.Stretch;
+			btnCheck.BackgroundImage        = Image.FromFile("done_FILL0_wght400_GRAD0_opsz48.png");
 			btnCheck.Size = new Size(20, 20);
 			_mainPanel.Size = new Size(38 * _overallWidth + 200, 38 * _overallHeight + 200);
 			for (int i = 0; i < _overallHeight; i++)
 			{
 				List<PictureBox> linePictureBoxes = new List<PictureBox>();
-				List<Label> lineLabels = new List<Label>();
+				List<Label> lineLabels            = new List<Label>();
 				for (int j = 0; j < _overallWidth; j++)
 				{
 					if (i < _topIndicesLegnth ^ j < _leftIndicesLength)
 					{
 						_label = new Label();
 						_mainPanel.Controls.Add(_label);
-						if (nObj._lst[cur_index] != 0)
-							_label.Text = nObj._lst[cur_index].ToString();
+						if (nObj.Lst[curIndex] != 0)
+							_label.Text = nObj.Lst[curIndex].ToString();
 						else
 						{
 							_label.Hide();
 						}
-						_label.Size = new Size(38, 38);
-						_label.BorderStyle = BorderStyle.FixedSingle;
-						_label.Location = new Point(x, y);
-						_label.BackColor = Color.AliceBlue;
+						_label.Size                = new Size(38, 38);
+						_label.BorderStyle         = BorderStyle.FixedSingle;
+						_label.Location            = new Point(x, y);
+						_label.BackColor           = Color.AliceBlue;
 						lineLabels.Add(_label);
-						cur_index++;
+						curIndex++;
 					}
 					else if (i >= _topIndicesLegnth && j >= _leftIndicesLength)
 					{
-						_pictureBox = new PictureBox();
+						_pictureBox                       = new PictureBox();
 						_pictureBox.BackgroundImageLayout = ImageLayout.Zoom;
 						_mainPanel.Controls.Add(_pictureBox);
-						_pictureBox.Size = new Size(38, 38);
-						_pictureBox.BorderStyle = BorderStyle.FixedSingle;
-						_pictureBox.Location = new Point(x, y);
-						_pictureBox.BackColor = Color.WhiteSmoke;
-						_pictureBox.MouseClick += PictureBox_MouseClick;
-						_pictureBox.MouseDoubleClick += PictureBox_MouseDoubleClick;
+						_pictureBox.Size                  = new Size(38, 38);
+						_pictureBox.BorderStyle           = BorderStyle.FixedSingle;
+						_pictureBox.Location              = new Point(x, y);
+						_pictureBox.BackColor             = Color.WhiteSmoke;
+						_pictureBox.MouseClick           += PictureBox_MouseClick!;
+						_pictureBox.MouseDoubleClick     += PictureBox_MouseDoubleClick!;
 						linePictureBoxes.Add(_pictureBox);
-						cur_index++;
+						curIndex++;
 					}
 					x += 38;
 				}
-				x = 0;
+				x  = 0;
 				y += 38;
 				_pBoxes.Add(linePictureBoxes);
 				_labels.Add(lineLabels);
@@ -182,7 +175,7 @@ namespace nonogram_final
 
 		private void BtnBack_Click(object? sender, EventArgs e)
 		{
-			startForm startForm = new startForm();
+			StartForm startForm = new StartForm();
 			_thisGameBoard.Hide();
 			startForm.ShowDialog();
 			_thisGameBoard.Dispose();
@@ -220,7 +213,7 @@ namespace nonogram_final
 			int ind = 0;
 			while (ind < _singleNonogramList.Count)
 			{
-				if (_singleNonogramList[ind] != _checkNonogramObject._lst[ind])
+				if (_singleNonogramList[ind] != _checkNonogramObject.Lst[ind])
 					break;
 				ind++;
 			}
@@ -229,22 +222,24 @@ namespace nonogram_final
 				MessageBox.Show("Правильно!");
 			else
 				MessageBox.Show("Неправильно!");
+			_singleNonogramList.Clear();
 		}
+
 
 		private void CmbBox_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			ComboBox cmbBox = sender as ComboBox;
-			nonogram_object obj;
-			BinaryFormatter bf = new BinaryFormatter();
-			string path = "nonogram"  + cmbBox.SelectedIndex.ToString();
+			NonogramObject obj;
+			ComboBox? cmbBox      = sender as ComboBox;
+			BinaryFormatter bf   = new BinaryFormatter();
+			string path = "nonogram"  + cmbBox!.SelectedIndex.ToString();
 			using (FileStream fs = new FileStream(path, FileMode.Open))
 			{
-				obj = (nonogram_object)bf.Deserialize(fs);
+				obj = (NonogramObject)bf.Deserialize(fs);
 				fs.Close();
 			}
 			_thisGameBoard.Hide();
 			gameBoard gameBoard = new gameBoard();
-			nonogramClass ngr = new nonogramClass(obj._width, obj._height, gameBoard);
+			nonogramClass ngr   = new nonogramClass(obj.Width, obj.Height, gameBoard);
 			ngr.MakeGameFields(obj);
 			gameBoard.ShowDialog();
 		}
@@ -274,80 +269,89 @@ namespace nonogram_final
 			}
 		}
 
-		private TextBox txtWidth;
-		private TextBox txtHeight;
+		private TextBox _txtWidth;
+		private TextBox _txtHeight;
+
 		public void addAddButton()
 		{
-			Button btnAdd = new Button();
-			Button btnUpdate = new Button();
-			btnUpdate.FlatStyle = FlatStyle.Popup;
-			btnAdd.FlatStyle = FlatStyle.Popup;
-			btnUpdate.Size = new Size(20, 20);
-			btnUpdate.Anchor = AnchorStyles.Left | AnchorStyles.Top;
+			Button btnAdd                 = new Button();
+			Button btnUpdate              = new Button();
+			btnUpdate.FlatStyle           = FlatStyle.Popup;
+			btnAdd.FlatStyle              = FlatStyle.Popup;
+			btnUpdate.Size                = new Size(20, 20);
+			btnUpdate.Anchor              = AnchorStyles.Left | AnchorStyles.Top;
 			btnUpdate.BackgroundImageLayout = ImageLayout.Stretch;
-			btnUpdate.Click += BtnUpdate_Click;
+			btnUpdate.Click              += BtnUpdate_Click!;
 			btnUpdate.Location = new Point(0, 20);
-			btnUpdate.BackgroundImage = Image.FromFile("update_FILL0_wght400_GRAD0_opsz48.png");
+			btnUpdate.BackgroundImage     = Image.FromFile("update_FILL0_wght400_GRAD0_opsz48.png");
 			_mainPanel.Controls.Add(btnUpdate);
-			btnAdd.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-			btnAdd.Size = new Size(20, 20);
-			btnAdd.Location = new Point(0, 0);
-			btnAdd.Click += BtnAdd_Click;
+			btnAdd.Anchor                 = AnchorStyles.Top | AnchorStyles.Left;
+			btnAdd.Size                   = new Size(20, 20);
+			btnAdd.Location               = new Point(0, 0);
+			btnAdd.Click                 += BtnAdd_Click!;
 			btnAdd.BackgroundImage = Image.FromFile("outline_add_black_48dp.png");
-			btnAdd.BackgroundImageLayout = ImageLayout.Stretch;
-			Button btnback = new Button();
+			btnAdd.BackgroundImageLayout  = ImageLayout.Stretch;
+			Button btnback                = new Button();
 			_mainPanel.Controls.Add(btnback);
-			btnback.Location = new Point(btnUpdate.Location.X, btnUpdate.Location.Y + 20);
+			btnback.Location              = new Point(btnUpdate.Location.X, btnUpdate.Location.Y + 20);
 			btnback.BackgroundImageLayout = ImageLayout.Stretch;
-			btnback.FlatStyle = FlatStyle.Popup;
-			btnback.Size = new Size(20, 20);
-			btnback.BackgroundImage = Image.FromFile("keyboard_backspace_FILL0_wght400_GRAD0_opsz48.png");
-			btnback.Click += Btnback_Click;
-			txtWidth = new TextBox();
-			txtHeight = new TextBox();
-			_mainPanel.Controls.Add(txtHeight);
-			txtHeight.Size = new Size(20, 20);
-			txtWidth.Size = new Size(20, 20);
-			txtHeight.Location = new Point(20, 0);
-			txtWidth.Location = new Point(20, 20);
-			_mainPanel.Controls.Add(txtWidth);
+			btnback.FlatStyle             = FlatStyle.Popup;
+			btnback.Size                  = new Size(20, 20);
+			btnback.BackgroundImage       = Image.FromFile("keyboard_backspace_FILL0_wght400_GRAD0_opsz48.png");
+			btnback.Click                += Btnback_Click;
+			_txtWidth                      = new TextBox();
+			_txtHeight                     = new TextBox();
+			_mainPanel.Controls.Add(_txtHeight);
+			_txtHeight.Size                = new Size(20, 20);
+			_txtWidth.Size                 = new Size(20, 20);
+			_txtHeight.Location            = new Point(20, 0);
+			_txtWidth.Location             = new Point(20, 20);
+			_mainPanel.Controls.Add(_txtWidth);
 			_mainPanel.Controls.Add(btnAdd);
 
 		}
 
 		private void Btnback_Click(object? sender, EventArgs e)
 		{
-			startForm startForm = new startForm();
+			StartForm startForm = new StartForm();
 			_thisGameBoard.Hide();
 			startForm.ShowDialog();
 			_thisGameBoard.Dispose();
 		}
 
+
 		private void BtnUpdate_Click(object sender, EventArgs e)
 		{
 			gameBoard newGameBoard = new gameBoard();
-			nonogramClass ngr = new nonogramClass(Convert.ToInt32(txtWidth.Text),
-				Convert.ToInt32(txtHeight.Text), newGameBoard);
+			if (_txtWidth.Text == "" || _txtHeight.Text == "")
+			{
+				_txtHeight.Text = _height.ToString();
+				_txtWidth.Text  = _width.ToString();
+			}
+			nonogramClass ngr      = new nonogramClass(Convert.ToInt32(_txtWidth.Text),
+				                                       Convert.ToInt32(_txtHeight.Text), newGameBoard);
 			_thisGameBoard.Hide();
 			ngr.addAddButton();
 			ngr.MakeGameFields();
 			newGameBoard.ShowDialog();
 		}
 
+
 		private void BtnAdd_Click(object sender, EventArgs e)
 		{
-			IFormatter formatter = new BinaryFormatter();
-			using (var writer = new FileStream("index.txt", FileMode.Open))
+			IFormatter formatter              = new BinaryFormatter();
+			using (var writer                 = new FileStream("index.txt", FileMode.Open))
 			{
-				nonogramClass.Index = (int)formatter.Deserialize(writer);
+				nonogramClass.Index           = (int)formatter.Deserialize(writer);
 			}
 			FillIndices();
 			MakeGameFields(this);
-			nonogram_object newNonogramObject = new nonogram_object("name", _width, _height, _singleNonogramList);
+			NonogramObject newNonogramObject = new NonogramObject("name", _width, _height, _singleNonogramList);
 			string path = "nonogram" + (Index++).ToString();
+			XmlSerializer serializer = new XmlSerializer(typeof(NonogramObject));
 			using (var writer = new FileStream(path, FileMode.OpenOrCreate))
 			{
-				formatter.Serialize(writer, newNonogramObject);
+				serializer.Serialize(writer, newNonogramObject);
 			}
 			File.Delete("index.txt");
 			using (var writer = new FileStream("index.txt", FileMode.Create))
@@ -442,30 +446,30 @@ namespace nonogram_final
 					}
 				}
 			}
-			_allNonograms.Add(_singleNonogramList);
+			//_allNonograms.Add(_singleNonogramList);
 		}
 
 		private void PictureBox_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			PictureBox pictureBox = sender as PictureBox;
+			PictureBox? pictureBox = sender as PictureBox;
 			if (e.Button == MouseButtons.Left)
 			{
-				pictureBox.BackgroundImage = Image.FromFile("C:\\Users\\Abstergo\\source\\repos\\nonogram_final_v2.0\\nonogram_final_v2.0\\Resources\\outline_close_black_48dp.png");
+				pictureBox!.BackgroundImage = Image.FromFile("outline_close_black_48dp.png");
 				pictureBox.BackColor = Color.WhiteSmoke;
 			}
 		}
 
 		private void PictureBox_MouseClick(object sender, MouseEventArgs e)
 		{
-			PictureBox pictureBox = sender as PictureBox;
+			PictureBox? pictureBox = sender as PictureBox;
 			if (e.Button == MouseButtons.Left)
 			{
-				pictureBox.BackgroundImage = null;
+				pictureBox!.BackgroundImage = null;
 				pictureBox.BackColor = Color.Black;
 			}
 			else if (e.Button == MouseButtons.Right)
 			{
-				pictureBox.BackgroundImage = Image.FromFile("C:\\Users\\Abstergo\\source\\repos\\nonogram_final_v2.0\\nonogram_final_v2.0\\Resources\\outline_close_black_48dp.png");
+				pictureBox!.BackgroundImage = Image.FromFile("outline_close_black_48dp.png");
 				pictureBox.BackColor = Color.WhiteSmoke;
 			}
 
@@ -474,22 +478,3 @@ namespace nonogram_final
 
 	}
 }
-[Serializable]
-public class nonogram_object
-{
-	public string _name;
-	public int _width;
-	public int _height;
-	public List<int> _lst;
-
-	public nonogram_object(string name, int width, int height, List<int> lst)
-	{
-		_name = name;
-		_width = width;
-		_height = height;
-		_lst = lst;
-	}
-	public nonogram_object() { }
-}
-
-
