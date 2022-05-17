@@ -7,8 +7,8 @@ namespace nonogram_final
 
 	public class nonogramClass
 	{
-		private NonogramObject                 _checkNonogramObject;
-		public static int                       Index;
+		private NonogramObject                  _checkNonogramObject;
+		protected internal static int            Index;
 		private readonly int                    _width;
 		private readonly int                    _height;
 		private readonly int                    _overallHeight;
@@ -17,10 +17,10 @@ namespace nonogram_final
 		private readonly int                    _leftIndicesLength;
 		private PictureBox                      _pictureBox;
 		private Label                           _label;
+		private readonly gameBoard              _thisGameBoard;
 		private readonly List<List<PictureBox>> _pBoxes             = new();
 		private readonly List<List<Label>>      _labels             = new();
 		private readonly List<int>              _singleNonogramList = new();
-		private readonly gameBoard              _thisGameBoard;
 		private readonly Panel                  _mainPanel          = new();
 
 
