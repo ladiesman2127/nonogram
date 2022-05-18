@@ -1,10 +1,10 @@
 ﻿[Serializable]
 public class NonogramObject
 {
-	public string    Name;
+	public string    Name = null!;
 	public int       Width;
 	public int       Height;
-	public List<int> Lst;
+	public List<int> Lst = null!;
 
 	public NonogramObject(string name, int width, int height, List<int> lst)
 	{

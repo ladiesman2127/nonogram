@@ -42,7 +42,9 @@
 			this.Name = "StartForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Nonogram";
+#pragma warning disable CS0618
 			this.Load += new System.EventHandler(this.startForm_Load);
+#pragma warning restore CS0618
 			this.ResumeLayout(false);
 
 		}
