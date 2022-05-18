@@ -1758,4 +1758,7 @@
   <data name="StartForm_startForm_Load_Играть" xml:space="preserve">
 	  <value>Играть</value>
   </data>
+  <data name="nonogramClass_BtnCheck_Click_Правильно_" xml:space="preserve">
+	  <value>Правильно!</value>
+  </data>
 </root>

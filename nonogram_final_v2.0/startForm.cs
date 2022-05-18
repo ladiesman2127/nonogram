@@ -1,5 +1,7 @@
 ﻿using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
+using nonogram_final_v2;
+using nonogram_final_v2._0;
 
 
 namespace nonogram_final
@@ -52,23 +54,25 @@ namespace nonogram_final
 			Close();
 		}
 
+		[Obsolete("Obsolete")]
 		private void BtnAddNgr_Click(object sender, EventArgs e)
 		{
 			gameBoard gameBoard = new gameBoard();
-			nonogramClass ngr   = new nonogramClass(10, 10,gameBoard);
+			NonogramClass ngr   = new NonogramClass(10, 10,gameBoard);
 			Hide(); 
 			ngr.MakeGameFields();
-			ngr.addAddButton();
+			ngr.AddAddButton();
 			gameBoard.ShowDialog();
 			Dispose();
 		}
 
+		[Obsolete("Obsolete")]
 		private void BtnStart_Click(object sender, EventArgs e)
 		{
 			NonogramObject obj;
 			XmlSerializer serializer = new XmlSerializer(typeof(NonogramObject));
 			Random rnd           = new Random();
-			int rand             = rnd.Next(nonogramClass.Index);
+			int rand             = rnd.Next(NonogramClass.Index);
 			string path = "nonogram" + rand.ToString();
 			using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
 			{
@@ -77,7 +81,7 @@ namespace nonogram_final
 			}
 			Hide();
 			gameBoard gameBoard = new gameBoard();
-			nonogramClass ngr   = new nonogramClass(obj.Width, obj.Height, gameBoard);
+			NonogramClass ngr   = new NonogramClass(obj.Width, obj.Height, gameBoard);
 			ngr.MakeGameFields(obj);
 			gameBoard.ShowDialog();
 			Dispose();

@@ -1,13 +1,14 @@
 ﻿using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
+using nonogram_final;
 
-namespace nonogram_final
+namespace nonogram_final_v2._0
 {
 
-	public class nonogramClass
+	public class NonogramClass
 	{
-		private NonogramObject                  _checkNonogramObject;
+		private NonogramObject                  _checkNonogramObject = null!;
 		protected internal static int            Index;
 		private readonly int                    _width;
 		private readonly int                    _height;
@@ -15,8 +16,8 @@ namespace nonogram_final
 		private readonly int                    _overallWidth;
 		private readonly int                    _topIndicesLegnth;
 		private readonly int                    _leftIndicesLength;
-		private PictureBox                      _pictureBox;
-		private Label                           _label;
+		private PictureBox                      _pictureBox = null!;
+		private Label                           _label = null!;
 		private readonly gameBoard              _thisGameBoard;
 		private readonly List<List<PictureBox>> _pBoxes             = new();
 		private readonly List<List<Label>>      _labels             = new();
@@ -25,7 +26,8 @@ namespace nonogram_final
 
 
 
-		public nonogramClass(int width, int height, gameBoard gameBoard)
+		// ReSharper disable once IdentifierTypo
+		public NonogramClass(int width, int height, gameBoard gameBoard)
 		{
 			gameBoard.StartPosition = FormStartPosition.CenterScreen;
 			gameBoard.Controls.Add(_mainPanel);
@@ -90,6 +92,7 @@ namespace nonogram_final
 			}
 		}
 
+		[Obsolete("Obsolete")]
 		public void MakeGameFields(NonogramObject nObj)
 		{
 			_checkNonogramObject = nObj;
@@ -102,7 +105,7 @@ namespace nonogram_final
 			IFormatter formatter            = new BinaryFormatter();
 			using (var writer               = new FileStream("index.txt", FileMode.Open))
 			{
-				nonogramClass.Index         = (int)formatter.Deserialize(writer);
+				NonogramClass.Index         = (int)formatter.Deserialize(writer);
 			}
 			ComboBox cmbBox                 = new ComboBox();
 			cmbBox.SelectedIndexChanged    += CmbBox_SelectedIndexChanged;
@@ -190,9 +193,9 @@ namespace nonogram_final
 					if (i < _topIndicesLegnth ^ j < _leftIndicesLength)
 					{
 						if (i < _topIndicesLegnth && j >= _leftIndicesLength &&
-						    _labels[i][j - _leftIndicesLength].Text != "0" && _labels[i][j - _leftIndicesLength].Text != "")
+						    _labels[i][j - _leftIndicesLength].Text != @"0" && _labels[i][j - _leftIndicesLength].Text != "")
 							_singleNonogramList.Add(Convert.ToInt32(_labels[i][j - _leftIndicesLength].Text));
-						else if (i >= _topIndicesLegnth && j < _leftIndicesLength && _labels[i][j].Text != "0" &&  _labels[i][j].Text != "")
+						else if (i >= _topIndicesLegnth && j < _leftIndicesLength && _labels[i][j].Text != @"0" &&  _labels[i][j].Text != "")
 							_singleNonogramList.Add(Convert.ToInt32(_labels[i][j].Text));
 						else
 						{
@@ -226,31 +229,32 @@ namespace nonogram_final
 		}
 
 
+		[Obsolete("Obsolete")]
 		private void CmbBox_SelectedIndexChanged(object? sender, EventArgs e)
 		{
 			NonogramObject obj;
-			ComboBox? cmbBox      = sender as ComboBox;
-			BinaryFormatter bf   = new BinaryFormatter();
+			ComboBox? cmbBox          = sender as ComboBox;
+			XmlSerializer serializer  = new XmlSerializer(typeof(NonogramObject));
 			string path = "nonogram"  + cmbBox!.SelectedIndex.ToString();
 			using (FileStream fs = new FileStream(path, FileMode.Open))
 			{
-				obj = (NonogramObject)bf.Deserialize(fs);
+				obj = (NonogramObject)serializer.Deserialize(fs)!;
 				fs.Close();
 			}
 			_thisGameBoard.Hide();
-			gameBoard gameBoard = new gameBoard();
-			nonogramClass ngr   = new nonogramClass(obj.Width, obj.Height, gameBoard);
+			gameBoard gameBoard       = new gameBoard();
+			NonogramClass ngr         = new NonogramClass(obj.Width, obj.Height, gameBoard);
 			ngr.MakeGameFields(obj);
 			gameBoard.ShowDialog();
 		}
 
-		public void MakeGameFields(nonogramClass ngr)
+		public void MakeGameFields(NonogramClass ngr)
 		{
 			for (int i = 0; i < _topIndicesLegnth; i++)
 			{
 				for (int j = 0; j < _width; j++)
 				{
-					if (_labels[i][j].Text == "0")
+					if (_labels[i][j].Text == @"0")
 						_labels[i][j].Hide();
 					else
 						_labels[i][j].Show();
@@ -261,7 +265,7 @@ namespace nonogram_final
 			{
 				for (int j = 0; j < _leftIndicesLength; j++)
 				{
-					if (_labels[i][j].Text == "0")
+					if (_labels[i][j].Text == @"0")
 						_labels[i][j].Hide();
 					else
 						_labels[i][j].Show();
@@ -269,10 +273,11 @@ namespace nonogram_final
 			}
 		}
 
-		private TextBox _txtWidth;
-		private TextBox _txtHeight;
+		private TextBox _txtWidth = null!;
+		private TextBox _txtHeight = null!;
 
-		public void addAddButton()
+		[Obsolete("Obsolete")]
+		public void AddAddButton()
 		{
 			Button btnAdd                 = new Button();
 			Button btnUpdate              = new Button();
@@ -320,6 +325,7 @@ namespace nonogram_final
 		}
 
 
+		[Obsolete("Obsolete")]
 		private void BtnUpdate_Click(object sender, EventArgs e)
 		{
 			gameBoard newGameBoard = new gameBoard();
@@ -328,21 +334,22 @@ namespace nonogram_final
 				_txtHeight.Text = _height.ToString();
 				_txtWidth.Text  = _width.ToString();
 			}
-			nonogramClass ngr      = new nonogramClass(Convert.ToInt32(_txtWidth.Text),
+			NonogramClass ngr      = new NonogramClass(Convert.ToInt32(_txtWidth.Text),
 				                                       Convert.ToInt32(_txtHeight.Text), newGameBoard);
 			_thisGameBoard.Hide();
-			ngr.addAddButton();
+			ngr.AddAddButton();
 			ngr.MakeGameFields();
 			newGameBoard.ShowDialog();
 		}
 
 
+		[Obsolete("Obsolete")]
 		private void BtnAdd_Click(object sender, EventArgs e)
 		{
 			IFormatter formatter              = new BinaryFormatter();
 			using (var writer                 = new FileStream("index.txt", FileMode.Open))
 			{
-				nonogramClass.Index           = (int)formatter.Deserialize(writer);
+				NonogramClass.Index           = (int)formatter.Deserialize(writer);
 			}
 			FillIndices();
 			MakeGameFields(this);
@@ -389,7 +396,7 @@ namespace nonogram_final
 
 				while (leftIndicesIndex >= 0)
 				{
-					_labels[i][leftIndicesIndex--].Text = "0";
+					_labels[i][leftIndicesIndex--].Text = @"0";
 				}
 			}
 
@@ -417,7 +424,7 @@ namespace nonogram_final
 
 				while (topIndicesIndex >= 0)
 				{
-					_labels[topIndicesIndex--][i].Text = "0";
+					_labels[topIndicesIndex--][i].Text = @"0";
 				}
 			}
 			for (int i = 0; i < _overallHeight; i++)
@@ -427,9 +434,9 @@ namespace nonogram_final
 					if (i < _topIndicesLegnth ^ j < _leftIndicesLength)
 					{
 						if (i < _topIndicesLegnth && j >= _leftIndicesLength &&
-							_labels[i][j - _leftIndicesLength].Text != "0")
+							_labels[i][j - _leftIndicesLength].Text != @"0")
 							_singleNonogramList.Add(Convert.ToInt32(_labels[i][j - _leftIndicesLength].Text));
-						else if (i >= _topIndicesLegnth && j < _leftIndicesLength && _labels[i][j].Text != "0")
+						else if (i >= _topIndicesLegnth && j < _leftIndicesLength && _labels[i][j].Text != @"0")
 							_singleNonogramList.Add(Convert.ToInt32(_labels[i][j].Text));
 						else
 						{
