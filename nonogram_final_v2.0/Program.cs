@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Windows.Media.Playback;
 
 namespace nonogram_final
 {
@@ -16,6 +18,8 @@ namespace nonogram_final
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			SoundPlayer sp = new SoundPlayer("Gemie - YouSeeBIGGIRL _ T_T .wav");
+			sp.Play();
 			Application.Run(new StartForm());
 		}
 	}

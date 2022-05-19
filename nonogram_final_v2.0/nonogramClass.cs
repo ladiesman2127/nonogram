@@ -217,14 +217,16 @@ namespace nonogram_final_v2._0
 			while (ind < _singleNonogramList.Count)
 			{
 				if (_singleNonogramList[ind] != _checkNonogramObject.Lst[ind])
+				{
+					MessageBox.Show(@"Неправильно!");
+					_singleNonogramList.Clear();
 					break;
+				}
 				ind++;
 			}
 
 			if (ind == _singleNonogramList.Count)
 				MessageBox.Show(@"Правильно!");
-			else
-				MessageBox.Show(@"Неправильно!");
 			_singleNonogramList.Clear();
 		}
 
