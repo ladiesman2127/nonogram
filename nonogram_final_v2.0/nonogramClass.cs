@@ -16,8 +16,8 @@ namespace nonogram_final_v2._0
 		private readonly int                    _overallWidth;
 		private readonly int                    _topIndicesLegnth;
 		private readonly int                    _leftIndicesLength;
-		private PictureBox                      _pictureBox = null!;
-		private Label                           _label = null!;
+		private PictureBox                      _pictureBox         = null!;
+		private Label                           _label              = null!;
 		private readonly gameBoard              _thisGameBoard;
 		private readonly List<List<PictureBox>> _pBoxes             = new();
 		private readonly List<List<Label>>      _labels             = new();
@@ -222,9 +222,9 @@ namespace nonogram_final_v2._0
 			}
 
 			if (ind == _singleNonogramList.Count)
-				MessageBox.Show("Правильно!");
+				MessageBox.Show(@"Правильно!");
 			else
-				MessageBox.Show("Неправильно!");
+				MessageBox.Show(@"Неправильно!");
 			_singleNonogramList.Clear();
 		}
 
