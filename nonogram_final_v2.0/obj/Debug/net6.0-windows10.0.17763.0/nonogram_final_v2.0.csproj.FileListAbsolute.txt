@@ -1,7 +1,6 @@
 C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final_v2.0.csproj.AssemblyReference.cache
 C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final.gameBoard.resources
 C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final_v2._0.Resources.Properties.Resources.resources
-C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final.startForm.resources
 C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final_v2.0.csproj.GenerateResource.cache
 C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final_v2.0.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final_v2.0.AssemblyInfoInputs.cache
@@ -20,3 +19,4 @@ C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug
 C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final_v2.0.pdb
 C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final_v2.0.genruntimeconfig.cache
 C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\ref\nonogram_final_v2.0.dll
+C:\Users\Abstergo\source\repos\nonogram_final_v2.0\nonogram_final_v2.0\obj\Debug\net6.0-windows10.0.17763.0\nonogram_final_v2._0.StartForm.resources

@@ -488,27 +488,22 @@ namespace nonogram_final_v2._0
 		private void PictureBox_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			PictureBox? pictureBox = sender as PictureBox;
-			if (e.Button == MouseButtons.Left)
-			{
-				pictureBox!.BackgroundImage = Image.FromFile("outline_close_black_48dp.png");
-				pictureBox.BackColor = Color.WhiteSmoke;
-			}
+			pictureBox!.BackColor = Color.WhiteSmoke;
 		}
 
 		private void PictureBox_MouseClick(object sender, MouseEventArgs e)
 		{
 			PictureBox? pictureBox = sender as PictureBox;
-			if (e.Button == MouseButtons.Left)
-			{
-				pictureBox!.BackgroundImage = null;
-				pictureBox.BackColor = Color.Black;
-			}
-			else if (e.Button == MouseButtons.Right)
+			if (e.Button == MouseButtons.Right)
 			{
 				pictureBox!.BackgroundImage = Image.FromFile("outline_close_black_48dp.png");
-				pictureBox.BackColor = Color.WhiteSmoke;
+				pictureBox.BackColor        = Color.WhiteSmoke;
 			}
-
+			else if (e.Button == MouseButtons.Left)
+			{
+				pictureBox!.Image            = null;
+				pictureBox.BackColor        = Color.Black;
+			}
 		}
 
 		[Serializable]
