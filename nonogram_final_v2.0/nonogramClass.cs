@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using nonogram_final;
 
 namespace nonogram_final_v2._0
@@ -9,13 +7,13 @@ namespace nonogram_final_v2._0
 	public class NonogramClass
 	{
 		private NonogramObject                  _checkNonogramObject = null!;
-		protected internal static int            Index;
 		private readonly int                    _width;
 		private readonly int                    _height;
 		private readonly int                    _overallHeight;
 		private readonly int                    _overallWidth;
 		private readonly int                    _topIndicesLegnth;
 		private readonly int                    _leftIndicesLength;
+		private ComboBox                         _cmbBox            = new();
 		private PictureBox                      _pictureBox         = null!;
 		private Label                           _label              = null!;
 		private readonly gameBoard              _thisGameBoard;
@@ -42,9 +40,8 @@ namespace nonogram_final_v2._0
 				_leftIndicesLength++;
 			_overallHeight      = height + _topIndicesLegnth;
 			_overallWidth       = width + _leftIndicesLength;
-			gameBoard.Size      = new Size(38 * _overallWidth + 80, 
-				                           38 * _overallHeight + 80);
-			_mainPanel.Location = new Point(30, 30);
+			gameBoard.Size      = new Size(800,800);
+			_mainPanel.Location = new Point(200,20);
 
 		}
 
@@ -67,7 +64,7 @@ namespace nonogram_final_v2._0
 						_label.Size                       = new Size(38, 38);
 						_label.BorderStyle                = BorderStyle.FixedSingle;
 						_label.Location                   = new Point(x, y);
-						_label.BackColor                  = Color.AliceBlue;
+						_label.BackColor                  = Color.Aquamarine;
 						lineLabels.Add(_label);
 					}
 					else if (i >= _topIndicesLegnth && j >= _leftIndicesLength)
@@ -92,44 +89,46 @@ namespace nonogram_final_v2._0
 			}
 		}
 
-		[Obsolete("Obsolete")]
 		public void MakeGameFields(NonogramObject nObj)
 		{
+			_mainPanel.Location = _mainPanel.Location with { Y = _mainPanel.Location.Y + 38 * _height / 2 };
 			_checkNonogramObject = nObj;
 			int x                           = 0;
 			int y                           = 0;
 			int curIndex                    = 0;
 			Button btnBack                  = new Button();
-			_mainPanel.Controls.Add(btnBack);
-			btnBack.Size                    = new Size(20, 20);
-			IFormatter formatter            = new BinaryFormatter();
-			using (var writer               = new FileStream("index.txt", FileMode.Open))
+			_thisGameBoard.Controls.Add(btnBack);
+			//btnBack.Size                    = new Size(20, 20);
+			CmbBoxItems cmbBoxItems;
+			_cmbBox.SelectedIndexChanged    += CmbBox_SelectedIndexChanged;
+			XmlSerializer serializer = new XmlSerializer(typeof(CmbBoxItems));
+			using (var writer = new FileStream("items.xml", FileMode.Open))
 			{
-				NonogramClass.Index         = (int)formatter.Deserialize(writer);
+				cmbBoxItems = (CmbBoxItems)serializer.Deserialize(writer)!;
 			}
-			ComboBox cmbBox                 = new ComboBox();
-			cmbBox.SelectedIndexChanged    += CmbBox_SelectedIndexChanged;
-			for (int i = 0; i < Index; i++)
+
+			for (int i = 0; i < cmbBoxItems.Items.Count; ++i)
 			{
-				cmbBox.Items.Add(i.ToString());
+				_cmbBox.Items.Add(cmbBoxItems.Items[i]);
 			}
-			_mainPanel.Controls.Add(cmbBox);
-			cmbBox.Size                     = new Size(40, 10);
-			cmbBox.Location                 = new Point(0,20);
-			btnBack.Location                = new Point(20, 0);
+			_thisGameBoard.Controls.Add(_cmbBox);
+			_cmbBox.BringToFront();
+			_cmbBox.Location                 = new Point(20,20);
+			btnBack.Location                = new Point(20, 50);
 			btnBack.FlatStyle               = FlatStyle.Popup;
 			btnBack.BackgroundImageLayout   = ImageLayout.Stretch;
-			btnBack.BackgroundImage         = Image.FromFile("keyboard_backspace_FILL0_wght400_GRAD0_opsz48.png");
+			btnBack.Text                    = "Назад";
 			Button btnCheck                 = new Button();
 			btnBack.Click                  += BtnBack_Click;
 			btnCheck.Click                 += BtnCheck_Click;
-			_mainPanel.Controls.Add(btnCheck);
+			_thisGameBoard.Controls.Add(btnCheck);
 			btnCheck.FlatStyle              = FlatStyle.Popup;
-			btnCheck.Location               = new Point(0, 0);
+			btnCheck.Location               = new Point(20, 80);
 			btnCheck.BackgroundImageLayout  = ImageLayout.Stretch;
-			btnCheck.BackgroundImage        = Image.FromFile("done_FILL0_wght400_GRAD0_opsz48.png");
-			btnCheck.Size = new Size(20, 20);
-			_mainPanel.Size = new Size(38 * _overallWidth + 200, 38 * _overallHeight + 200);
+			btnCheck.Text                   = "Проверить";
+			//btnCheck.Size                   = new Size(20, 20);
+			_mainPanel.Size                 = new Size(38 * _overallWidth + 200, 38 * _overallHeight + 200);
+			_mainPanel.Location             = new Point(_mainPanel.Location.X - 100, _mainPanel.Location.Y - 80);
 			for (int i = 0; i < _overallHeight; i++)
 			{
 				List<PictureBox> linePictureBoxes = new List<PictureBox>();
@@ -149,7 +148,7 @@ namespace nonogram_final_v2._0
 						_label.Size                = new Size(38, 38);
 						_label.BorderStyle         = BorderStyle.FixedSingle;
 						_label.Location            = new Point(x, y);
-						_label.BackColor           = Color.AliceBlue;
+						_label.BackColor           = Color.Aquamarine;
 						lineLabels.Add(_label);
 						curIndex++;
 					}
@@ -218,7 +217,8 @@ namespace nonogram_final_v2._0
 			{
 				if (_singleNonogramList[ind] != _checkNonogramObject.Lst[ind])
 				{
-					MessageBox.Show(@"Неправильно!");
+					string ans = "Неправильно!\r\nПроверьте строку " + ((ind - 2) % _overallHeight - _height/2 + 1);
+					MessageBox.Show(ans);
 					_singleNonogramList.Clear();
 					break;
 				}
@@ -231,13 +231,11 @@ namespace nonogram_final_v2._0
 		}
 
 
-		[Obsolete("Obsolete")]
 		private void CmbBox_SelectedIndexChanged(object? sender, EventArgs e)
 		{
 			NonogramObject obj;
-			ComboBox? cmbBox          = sender as ComboBox;
 			XmlSerializer serializer  = new XmlSerializer(typeof(NonogramObject));
-			string path = "nonogram"  + cmbBox!.SelectedIndex.ToString();
+			string path = _cmbBox.SelectedItem.ToString()!;
 			using (FileStream fs = new FileStream(path, FileMode.Open))
 			{
 				obj = (NonogramObject)serializer.Deserialize(fs)!;
@@ -275,46 +273,73 @@ namespace nonogram_final_v2._0
 			}
 		}
 
-		private TextBox _txtWidth = null!;
+		private TextBox _txtWidth  = null!;
 		private TextBox _txtHeight = null!;
+		private TextBox _name      = null!;
 
-		[Obsolete("Obsolete")]
+
 		public void AddAddButton()
 		{
-			Button btnAdd                 = new Button();
-			Button btnUpdate              = new Button();
-			btnUpdate.FlatStyle           = FlatStyle.Popup;
-			btnAdd.FlatStyle              = FlatStyle.Popup;
-			btnUpdate.Size                = new Size(20, 20);
-			btnUpdate.Anchor              = AnchorStyles.Left | AnchorStyles.Top;
+			Label lblWidth                  = new Label();
+			Label lblHeigth                 = new Label();
+			Label lblName                   = new Label();
+			_thisGameBoard.Controls.Add(lblWidth);
+			_thisGameBoard.Controls.Add(lblHeigth);
+			_thisGameBoard.Controls.Add(lblName);
+			lblWidth.Text                   = "Ширина";
+			lblHeigth.Text                  = "Высота";
+			lblName.Text                    = "Название";
+			lblWidth.Location               = new Point(20,120);
+			lblHeigth.Location              = new Point(20,140);
+			lblName.Location                = new Point(20,170);
+			Button btnAdd                   = new Button();
+			Button btnUpdate                = new Button();
+			Button btnback                  = new Button();
+			_thisGameBoard.Controls.Add(btnback);
+			_thisGameBoard.Controls.Add(btnAdd);
+			_thisGameBoard.Controls.Add(btnUpdate);
+			btnUpdate.FlatStyle             = FlatStyle.Popup;
+			btnAdd.FlatStyle                = FlatStyle.Popup;
+			//btnUpdate.Size                  = new Size(20, 20);
+			btnUpdate.Anchor                = AnchorStyles.Left | AnchorStyles.Top;
 			btnUpdate.BackgroundImageLayout = ImageLayout.Stretch;
-			btnUpdate.Click              += BtnUpdate_Click!;
-			btnUpdate.Location = new Point(0, 20);
-			btnUpdate.BackgroundImage     = Image.FromFile("update_FILL0_wght400_GRAD0_opsz48.png");
-			_mainPanel.Controls.Add(btnUpdate);
-			btnAdd.Anchor                 = AnchorStyles.Top | AnchorStyles.Left;
-			btnAdd.Size                   = new Size(20, 20);
-			btnAdd.Location               = new Point(0, 0);
-			btnAdd.Click                 += BtnAdd_Click!;
-			btnAdd.BackgroundImage = Image.FromFile("outline_add_black_48dp.png");
-			btnAdd.BackgroundImageLayout  = ImageLayout.Stretch;
-			Button btnback                = new Button();
-			_mainPanel.Controls.Add(btnback);
-			btnback.Location              = new Point(btnUpdate.Location.X, btnUpdate.Location.Y + 20);
-			btnback.BackgroundImageLayout = ImageLayout.Stretch;
-			btnback.FlatStyle             = FlatStyle.Popup;
-			btnback.Size                  = new Size(20, 20);
-			btnback.BackgroundImage       = Image.FromFile("keyboard_backspace_FILL0_wght400_GRAD0_opsz48.png");
-			btnback.Click                += Btnback_Click;
-			_txtWidth                      = new TextBox();
-			_txtHeight                     = new TextBox();
-			_mainPanel.Controls.Add(_txtHeight);
-			_txtHeight.Size                = new Size(20, 20);
-			_txtWidth.Size                 = new Size(20, 20);
-			_txtHeight.Location            = new Point(20, 0);
-			_txtWidth.Location             = new Point(20, 20);
-			_mainPanel.Controls.Add(_txtWidth);
-			_mainPanel.Controls.Add(btnAdd);
+			btnUpdate.Click                += BtnUpdate_Click!;
+			btnUpdate.Location              = new Point(20, 80);
+			btnUpdate.Text                  = "Обновить";
+			btnAdd.Anchor                   = AnchorStyles.Top | AnchorStyles.Left;
+			//btnAdd.Size                     = new Size(20, 20);
+			btnAdd.Location                 = new Point(20, 20);
+			btnAdd.Click                   += BtnAdd_Click!;
+			btnAdd.Text                     = "Добавить";
+			btnAdd.BackgroundImageLayout    = ImageLayout.Stretch;
+			btnback.Location                = btnAdd.Location with { Y = btnAdd.Location.Y + 30 };
+			btnback.BackgroundImageLayout   = ImageLayout.Stretch;
+			btnback.FlatStyle               = FlatStyle.Popup;
+			//btnback.Size                    = new Size(20, 20);
+			btnback.Text                    = "Назад";
+			btnback.Click                  += Btnback_Click;
+			_txtWidth                       = new TextBox();
+			_txtHeight                      = new TextBox();
+			_name                           = new TextBox();
+			_txtHeight.Size                 = new Size(30, 20);
+			_txtWidth.Size                  = new Size(30, 20);
+			_name.Size                      = new Size(50, 20);
+			_name.Location                  = lblName.Location with { X = lblName.Location.X + 100, 
+																	  Y = lblName.Location.Y - 5 };
+			_txtWidth.Location              = lblWidth.Location  with { X = lblWidth.Location.X  + 100 + 20};
+			_txtHeight.Location             = lblHeigth.Location with { X = lblHeigth.Location.X + 100 + 20};
+			_thisGameBoard.Controls.Add(_txtHeight);
+			_thisGameBoard.Controls.Add(_txtWidth);
+			_thisGameBoard.Controls.Add(_name);
+			_name.BringToFront();
+			_txtWidth.BringToFront();
+			_txtHeight.BringToFront();
+			lblName.BringToFront();
+			lblHeigth.BringToFront();
+			lblWidth.BringToFront();
+			btnback.BringToFront();
+			btnAdd.BringToFront();
+			btnUpdate.BringToFront();
 
 		}
 
@@ -327,7 +352,6 @@ namespace nonogram_final_v2._0
 		}
 
 
-		[Obsolete("Obsolete")]
 		private void BtnUpdate_Click(object sender, EventArgs e)
 		{
 			gameBoard newGameBoard = new gameBoard();
@@ -345,27 +369,31 @@ namespace nonogram_final_v2._0
 		}
 
 
-		[Obsolete("Obsolete")]
 		private void BtnAdd_Click(object sender, EventArgs e)
 		{
-			IFormatter formatter              = new BinaryFormatter();
-			using (var writer                 = new FileStream("index.txt", FileMode.Open))
+			CmbBoxItems cmbBoxItems = new CmbBoxItems();
+			XmlSerializer serializer = new XmlSerializer(typeof(CmbBoxItems));
+			if (File.Exists("items.xml"))
 			{
-				NonogramClass.Index           = (int)formatter.Deserialize(writer);
+				using (var writer = new FileStream("items.xml", FileMode.Open))
+				{
+					cmbBoxItems = (CmbBoxItems)serializer.Deserialize(writer)!;
+				}
+				File.Delete("items.xml");
 			}
 			FillIndices();
 			MakeGameFields(this);
-			NonogramObject newNonogramObject = new NonogramObject("name", _width, _height, _singleNonogramList);
-			string path = "nonogram" + (Index++).ToString();
-			XmlSerializer serializer = new XmlSerializer(typeof(NonogramObject));
-			using (var writer = new FileStream(path, FileMode.OpenOrCreate))
+			_cmbBox.Items.Add(_name.Text);
+			cmbBoxItems.Items.Add(_name.Text);
+			using (var writer = new FileStream("items.xml", FileMode.Create))
+			{
+				serializer.Serialize(writer, cmbBoxItems);
+			}
+			NonogramObject newNonogramObject = new NonogramObject(_name.Text, _width, _height, _singleNonogramList);
+			serializer = new XmlSerializer(typeof(NonogramObject));
+			using (var writer = new FileStream(_name.Text, FileMode.CreateNew))
 			{
 				serializer.Serialize(writer, newNonogramObject);
-			}
-			File.Delete("index.txt");
-			using (var writer = new FileStream("index.txt", FileMode.Create))
-			{
-				formatter.Serialize(writer, Index);
 			}
 		}
 
@@ -455,7 +483,6 @@ namespace nonogram_final_v2._0
 					}
 				}
 			}
-			//_allNonograms.Add(_singleNonogramList);
 		}
 
 		private void PictureBox_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -484,6 +511,13 @@ namespace nonogram_final_v2._0
 
 		}
 
+		[Serializable]
+	
+		public class CmbBoxItems
+		{
+			public CmbBoxItems (){}
 
+			public List<string> Items = new();
+		}
 	}
 }

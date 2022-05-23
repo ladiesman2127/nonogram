@@ -1,10 +1,7 @@
-﻿using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml.Serialization;
-using nonogram_final_v2;
-using nonogram_final_v2._0;
+﻿using System.Xml.Serialization;
+using nonogram_final;
 
-
-namespace nonogram_final
+namespace nonogram_final_v2._0
 {
 	public partial class StartForm : Form
 	{
@@ -70,10 +67,14 @@ namespace nonogram_final
 		private void BtnStart_Click(object sender, EventArgs e)
 		{
 			NonogramObject obj;
-			XmlSerializer serializer = new XmlSerializer(typeof(NonogramObject));
-			Random rnd           = new Random();
-			int rand             = rnd.Next(NonogramClass.Index);
-			string path = "nonogram" + rand.ToString();
+			NonogramClass.CmbBoxItems cmbBoxItems;
+			XmlSerializer serializer = new XmlSerializer(typeof(NonogramClass.CmbBoxItems));
+			using (var writer = new FileStream("items.xml", FileMode.Open))
+			{
+				cmbBoxItems = (NonogramClass.CmbBoxItems)serializer.Deserialize(writer)!;
+			}
+			serializer = new XmlSerializer(typeof(NonogramObject));
+			string path = cmbBoxItems.Items[0];
 			using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
 			{
 				obj = (NonogramObject)serializer.Deserialize(fs)!;

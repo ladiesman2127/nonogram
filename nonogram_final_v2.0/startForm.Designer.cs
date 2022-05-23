@@ -1,4 +1,4 @@
-﻿namespace nonogram_final
+﻿namespace nonogram_final_v2._0
 {
 	partial class StartForm
 	{
