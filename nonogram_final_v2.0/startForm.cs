@@ -10,7 +10,6 @@ namespace nonogram_final_v2._0
 			InitializeComponent();
 		}
 
-		[Obsolete("Obsolete")]
 		private void startForm_Load(object sender, EventArgs e)
 		{	
 			Button btnStartGame    = new Button();
@@ -51,7 +50,6 @@ namespace nonogram_final_v2._0
 			Close();
 		}
 
-		[Obsolete("Obsolete")]
 		private void BtnAddNgr_Click(object sender, EventArgs e)
 		{
 			gameBoard gameBoard = new gameBoard();
@@ -73,7 +71,7 @@ namespace nonogram_final_v2._0
 			{
 				cmbBoxItems = (NonogramClass.CmbBoxItems)serializer.Deserialize(writer)!;
 			}
-			serializer = new XmlSerializer(typeof(NonogramObject));
+			serializer  = new XmlSerializer(typeof(NonogramObject));
 			string path = cmbBoxItems.Items[0];
 			using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
 			{
