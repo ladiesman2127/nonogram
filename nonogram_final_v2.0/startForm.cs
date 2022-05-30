@@ -61,26 +61,25 @@ namespace nonogram_final_v2._0
 			Dispose();
 		}
 
-		[Obsolete("Obsolete")]
 		private void BtnStart_Click(object sender, EventArgs e)
 		{
 			NonogramObject obj;
-			NonogramClass.CmbBoxItems cmbBoxItems;
-			XmlSerializer serializer = new XmlSerializer(typeof(NonogramClass.CmbBoxItems));
-			using (var writer = new FileStream("items.xml", FileMode.Open))
+			NonogramClass.CmbBoxItems cmbBoxItems = new NonogramClass.CmbBoxItems();
+			string [] files = Directory.GetFiles(".", "*.xml");
+			XmlSerializer serializer  = new XmlSerializer(typeof(NonogramObject));
+			foreach (string file in files)
 			{
-				cmbBoxItems = (NonogramClass.CmbBoxItems)serializer.Deserialize(writer)!;
+				cmbBoxItems.Items.Add(file.Substring(2,file.Length - 2 - 4));
 			}
-			serializer  = new XmlSerializer(typeof(NonogramObject));
-			string path = cmbBoxItems.Items[0];
-			using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+			string path               = cmbBoxItems.Items[0] + ".xml";
+			using (FileStream fs      = new FileStream(path, FileMode.OpenOrCreate))
 			{
 				obj = (NonogramObject)serializer.Deserialize(fs)!;
 				fs.Close();
 			}
 			Hide();
-			gameBoard gameBoard = new gameBoard();
-			NonogramClass ngr   = new NonogramClass(obj.Width, obj.Height, gameBoard);
+			gameBoard gameBoard      = new gameBoard();
+			NonogramClass ngr        = new NonogramClass(obj.Width, obj.Height, gameBoard);
 			ngr.MakeGameFields(obj);
 			gameBoard.ShowDialog();
 			Dispose();

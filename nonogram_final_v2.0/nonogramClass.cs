@@ -102,21 +102,17 @@ namespace nonogram_final_v2._0
 			Button btnBack                  = new Button();
 			_thisGameBoard.Controls.Add(btnBack);
 			//btnBack.Size                    = new Size(20, 20);
-			CmbBoxItems cmbBoxItems;
-			_cmbBox.SelectedIndexChanged    += CmbBox_SelectedIndexChanged;
-			XmlSerializer serializer = new XmlSerializer(typeof(CmbBoxItems));
-			using (var writer = new FileStream("items.xml", FileMode.Open))
+			CmbBoxItems cmbBoxItems         = new CmbBoxItems();
+			_cmbBox.SelectedIndexChanged   += CmbBox_SelectedIndexChanged;
+			string[] files                  = Directory.GetFiles(".", "*.xml");
+			XmlSerializer serializer = new XmlSerializer(typeof(NonogramObject));
+			foreach (string file in files)
 			{
-				cmbBoxItems = (CmbBoxItems)serializer.Deserialize(writer)!;
-			}
-
-			for (int i = 0; i < cmbBoxItems.Items.Count; ++i)
-			{
-				_cmbBox.Items.Add(cmbBoxItems.Items[i]);
+				_cmbBox.Items.Add(file.Substring(2,file.Length - 2 - 4));
 			}
 			_thisGameBoard.Controls.Add(_cmbBox);
 			_cmbBox.BringToFront();
-			_cmbBox.Location                 = new Point(20,20);
+			_cmbBox.Location                = new Point(20,20);
 			btnBack.Location                = new Point(20, 50);
 			btnBack.FlatStyle               = FlatStyle.Popup;
 			btnBack.BackgroundImageLayout   = ImageLayout.Stretch;
@@ -220,7 +216,8 @@ namespace nonogram_final_v2._0
 			{
 				if (_singleNonogramList[ind] != _checkNonogramObject.Lst[ind])
 				{
-					string ans = "Неправильно!\r\nПроверьте столбец " + (((ind - 2) % _overallHeight - _height/2 + 1));
+					int row = (ind - _width * _topIndicesLegnth) % _overallHeight - _leftIndicesLength + 1;
+					string ans = "Неправильно!\r\nПроверьте столбец " + row;
 					MessageBox.Show(ans);
 					_singleNonogramList.Clear();
 					break;
@@ -238,7 +235,7 @@ namespace nonogram_final_v2._0
 		{
 			NonogramObject obj;
 			XmlSerializer serializer  = new XmlSerializer(typeof(NonogramObject));
-			string path = _cmbBox.SelectedItem.ToString()!;
+			string path = _cmbBox.SelectedItem.ToString()! + ".xml";
 			using (FileStream fs = new FileStream(path, FileMode.Open))
 			{
 				obj = (NonogramObject)serializer.Deserialize(fs)!;
@@ -372,32 +369,20 @@ namespace nonogram_final_v2._0
 		{
 
 			CmbBoxItems cmbBoxItems = new CmbBoxItems();
-			XmlSerializer serializer = new XmlSerializer(typeof(CmbBoxItems));
-			if (File.Exists("items.xml"))
-			{
-				using (var writer = new FileStream("items.xml", FileMode.Open))
-				{
-					cmbBoxItems = (CmbBoxItems)serializer.Deserialize(writer)!;
-				}
-				File.Delete("items.xml");
-			}
-
-			if (cmbBoxItems.Items.Contains(_name.Text))
+			XmlSerializer serializer = new XmlSerializer(typeof(NonogramObject));
+			if (File.Exists(_name.Text))
 			{
 				MessageBox.Show("Кроссворд с таким названием существует! Выберите другое название!");
 				return;
 			}
+
+			string path = _name.Text + ".xml";
 			FillIndices();
 			MakeGameFields(this);
 			_cmbBox.Items.Add(_name.Text);
 			cmbBoxItems.Items.Add(_name.Text);
-			using (var writer = new FileStream("items.xml", FileMode.Create))
-			{
-				serializer.Serialize(writer, cmbBoxItems);
-			}
 			NonogramObject newNonogramObject = new NonogramObject(_name.Text, _width, _height, _singleNonogramList);
-			serializer = new XmlSerializer(typeof(NonogramObject));
-			using (var writer = new FileStream(_name.Text, FileMode.CreateNew))
+			using (var writer = new FileStream(path, FileMode.CreateNew))
 			{
 				serializer.Serialize(writer, newNonogramObject);
 			}
