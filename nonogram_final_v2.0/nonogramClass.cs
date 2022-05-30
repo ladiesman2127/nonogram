@@ -13,7 +13,7 @@ namespace nonogram_final_v2._0
 		private readonly int                    _overallWidth;
 		private readonly int                    _topIndicesLegnth;
 		private readonly int                    _leftIndicesLength;
-		private ComboBox                         _cmbBox            = new();
+		private readonly ComboBox               _cmbBox             = new();
 		private PictureBox                      _pictureBox         = null!;
 		private Label                           _label              = null!;
 		private readonly gameBoard              _thisGameBoard;
@@ -21,6 +21,9 @@ namespace nonogram_final_v2._0
 		private readonly List<List<Label>>      _labels             = new();
 		private readonly List<int>              _singleNonogramList = new();
 		private readonly Panel                  _mainPanel          = new();
+		private TextBox                         _txtWidth           = null!;
+		private TextBox                         _txtHeight          = null!;
+		private TextBox                         _name               = null!;
 
 
 
@@ -217,7 +220,7 @@ namespace nonogram_final_v2._0
 			{
 				if (_singleNonogramList[ind] != _checkNonogramObject.Lst[ind])
 				{
-					string ans = "Неправильно!\r\nПроверьте строку " + ((ind - 2) % _overallHeight - _height/2 + 1);
+					string ans = "Неправильно!\r\nПроверьте столбец " + (((ind - 2) % _overallHeight - _height/2 + 1));
 					MessageBox.Show(ans);
 					_singleNonogramList.Clear();
 					break;
@@ -272,10 +275,6 @@ namespace nonogram_final_v2._0
 				}
 			}
 		}
-
-		private TextBox _txtWidth  = null!;
-		private TextBox _txtHeight = null!;
-		private TextBox _name      = null!;
 
 
 		public void AddAddButton()
@@ -371,6 +370,7 @@ namespace nonogram_final_v2._0
 
 		private void BtnAdd_Click(object sender, EventArgs e)
 		{
+
 			CmbBoxItems cmbBoxItems = new CmbBoxItems();
 			XmlSerializer serializer = new XmlSerializer(typeof(CmbBoxItems));
 			if (File.Exists("items.xml"))
@@ -380,6 +380,12 @@ namespace nonogram_final_v2._0
 					cmbBoxItems = (CmbBoxItems)serializer.Deserialize(writer)!;
 				}
 				File.Delete("items.xml");
+			}
+
+			if (cmbBoxItems.Items.Contains(_name.Text))
+			{
+				MessageBox.Show("Кроссворд с таким названием существует! Выберите другое название!");
+				return;
 			}
 			FillIndices();
 			MakeGameFields(this);
@@ -429,8 +435,6 @@ namespace nonogram_final_v2._0
 					_labels[i][leftIndicesIndex--].Text = @"0";
 				}
 			}
-
-
 			for (int i = _width - 1; i >= 0; i--)
 			{
 				verticalK = 0;
@@ -487,8 +491,9 @@ namespace nonogram_final_v2._0
 
 		private void PictureBox_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			PictureBox? pictureBox = sender as PictureBox;
-			pictureBox!.BackColor = Color.WhiteSmoke;
+			PictureBox? pictureBox          = sender as PictureBox;
+			pictureBox!.BackgroundImage     = null;
+			pictureBox.BackColor            = Color.WhiteSmoke;
 		}
 
 		private void PictureBox_MouseClick(object sender, MouseEventArgs e)
@@ -501,7 +506,7 @@ namespace nonogram_final_v2._0
 			}
 			else if (e.Button == MouseButtons.Left)
 			{
-				pictureBox!.Image            = null;
+				pictureBox!.BackgroundImage = null;
 				pictureBox.BackColor        = Color.Black;
 			}
 		}
